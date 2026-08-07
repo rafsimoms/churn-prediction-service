@@ -9,8 +9,8 @@ SELECT AVG(churned::int) FROM churn_labels; -- avg 0.26536987079369586824 - до
 SELECT COUNT(*) 
 FROM charges 
     JOIN contracts ON charges.customer_id = contracts.customer_id 
-WHERE contracts.tenure = 0; """ count 11 - строки где tenure = 0, у которых total_charges = ' ', 
-которое я при создании бд решил заменить на 0 """
+WHERE contracts.tenure = 0; /* count 11 - строки где tenure = 0, у которых total_charges = ' ', 
+которое я при создании бд решил заменить на 0 */
 
 SELECT COUNT(*) 
 FROM charges 
@@ -40,3 +40,17 @@ AVG(tenure) AS mean
 FROM churn_labels as l 
     JOIN contracts AS c ON l.customer_id = c.customer_id
 GROUP BY l.churned ORDER BY l.churned DESC; -- заросы на описательную статистику для числовых признаков
+
+SELECT CASE
+WHEN tenure <= 6 THEN '0-6'
+WHEN tenure <= 12 THEN '07-12'
+WHEN tenure <= 18 THEN '13-18'
+WHEN tenure <= 24 THEN '19-24'
+ELSE '25+' END AS tenure_bucket,
+co.contract, AVG(l.churned::int) AS churn_rate, COUNT(*) AS n
+FROM contracts AS co JOIN churn_labels AS l ON l.customer_id = co.customer_id
+GROUP BY 1, 2 -- пример запроса с бакетами для хитмапа между признаками
+
+SELECT co.contract, co.paperless_billing, AVG(l.churned::int) as churn_rate, COUNT(*) AS n
+FROM contracts AS co JOIN churn_labels AS l ON co.customer_id = l.customer_id
+GROUP BY co.contract, co.paperless_billing -- пример без бакетов

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS customers, contracts, services, charges, churn_labels;
+DROP TABLE IF EXISTS customers, contracts, services, charges, churn_labels, splits, prod_stream;
 
 CREATE TABLE customers (
     customer_id TEXT PRIMARY KEY,
@@ -32,4 +32,14 @@ CREATE TABLE charges(
 CREATE TABLE churn_labels(
     customer_id TEXT PRIMARY KEY REFERENCES customers(customer_id),
     churned BOOLEAN NOT NULL
+);
+
+CREATE TABLE splits(
+    customer_id TEXT PRIMARY KEY REFERENCES customers(customer_id),
+    split TEXT NOT NULL CHECK(split IN ('train', 'test', 'prod_stream'))
+);
+
+CREATE TABLE prod_stream(
+    customer_id TEXT PRIMARY KEY REFERENCES customers(customer_id),
+    batch_stream INT NOT NULL CHECK(batch_stream IN (1, 2))
 );

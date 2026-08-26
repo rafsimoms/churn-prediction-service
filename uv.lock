@@ -312,7 +312,7 @@ wheels = [
 [[package]]
 name = "churn-prediction-service"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "jupyter" },
     { name = "matplotlib" },

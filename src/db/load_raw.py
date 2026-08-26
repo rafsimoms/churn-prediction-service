@@ -1,9 +1,5 @@
-from dotenv import load_dotenv
 import pandas as pd
-from sqlalchemy import create_engine
-import os
-
-load_dotenv()
+from engine import get_engine
 
 SERVICE_COLUMNS = {
     "PhoneService": "phone",
@@ -19,13 +15,6 @@ SERVICE_COLUMNS = {
 
 BOOLEAN = {'Yes' : True, 'No' : False}
 
-def get_engine():
-    user = os.environ["POSTGRES_USER"]
-    password = os.environ["POSTGRES_PASSWORD"]
-    host = os.environ["POSTGRES_HOST"]
-    port = os.environ["POSTGRES_PORT"]
-    db = os.environ["POSTGRES_DB"]
-    return create_engine(f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}")
 
 def prepare_customers(df) -> pd.DataFrame:
     res = pd.DataFrame({

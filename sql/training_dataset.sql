@@ -20,7 +20,7 @@ base AS (
         JOIN charges AS ch USING(customer_id)
         JOIN churn_labels AS cl USING(customer_id)
         JOIN splits AS s USING(customer_id)
-    WHERE s.split = 'train'
+    WHERE s.split = 'train' AND co.tenure != 0
 )
 SELECT 
     b.customer_id,
